@@ -171,22 +171,6 @@ public class IndexOrthanc {
 	@SuppressWarnings("unchecked")
 	public void construireIndex() {
 		
-		
-		
-		// Ajout des parametre qui sera a fait dans des guetteur et des setteurs
-		//On cree les DicomNodes
-		//addDicomNode("Sassa", "Sassa", "10.10.20.20", 100, "Generic");
-		//addDicomNode("salouma", "sa", "20.20.20.20", 20, "Generic");
-	
-		//On ajoute un Lua Folder
-		//addLua("C:\\Program Files\\Orthanc Server\\Lua\\incoming.lua");
-		//Ajoute des plugin folder
-		//addplugins("C:\\Program Files\\Orthanc Server\\Plugins");
-		//ajoute des users
-		//addusers("salim","salim");
-		// ajout des orthanc peers
-		//addorthancPeer("peer1", "http://petctviewer.org", "sassa", "sassa");
-		
 		//On construit les objets dont on aura besoin
 		buildOrthancPeer(orthancPeer);
 		buildDicom(dicomNode);

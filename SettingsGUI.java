@@ -19,23 +19,34 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
 import javax.swing.border.LineBorder;
+
+import org.json.simple.parser.ParseException;
+
 import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
 
 
 public class SettingsGUI extends JsonParser {
@@ -59,7 +70,9 @@ public class SettingsGUI extends JsonParser {
 	protected static JLabel Dictionnary_Counter;
 	private JLabel Content_Type_Counter;
 	private JLabel Metadata_Counter;
-	
+	private String address="http://localhost:8043";
+	private String login;
+	private String password;
 
 	public SettingsGUI() {
 	//On initialiser l'index pour avoir les valeurs par defaut au demarrage
@@ -600,7 +613,7 @@ public class SettingsGUI extends JsonParser {
 	Network_Buttons.add(chckbx_Dicom_Always_Store);
 	
 	JCheckBox chckbx_Check_Modality_Store = new JCheckBox("Dicom Check Modality Host");
-	chckbx_Check_Modality_Store.setSelected(IndexOrthanc.DicomCheckCalledAet);
+	chckbx_Check_Modality_Store.setSelected(IndexOrthanc.CheckModalityHost);
 	chckbx_Check_Modality_Store.addFocusListener(new FocusAdapter() {
 		@Override
 		public void focusLost(FocusEvent e) {
@@ -1077,7 +1090,8 @@ public class SettingsGUI extends JsonParser {
 				try {
 					definitionFichier();
 					jsonParser();
-					window.dispose();
+					window.setVisible(false);
+					//On lance une nouvelle fenetre
 					SettingsGUI gui=new SettingsGUI();
 					gui.window.pack();
 					gui.window.setLocationRelativeTo(null);
@@ -1093,6 +1107,59 @@ public class SettingsGUI extends JsonParser {
 		
 	});
 	Bouttons_Bouttons.add(btnLoadJson);
+	
+	JPanel Orthanc_Connection = new JPanel();
+	buttons.add(Orthanc_Connection, BorderLayout.SOUTH);
+	
+	JButton btnRestartOrthancServer = new JButton("Restart Orthanc Server");
+	btnRestartOrthancServer.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			Rest_Restart2 restart=new Rest_Restart2();
+			try {
+				restart.restartOrthanc(address+"/tools/reset", login, password);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (KeyManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (KeyStoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	});
+	Orthanc_Connection.setLayout(new GridLayout(0, 2, 0, 0));
+	
+	JButton btnTestOrthancConnection = new JButton("Test Orthanc Connection");
+	btnTestOrthancConnection.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			Rest_Restart2 restart=new Rest_Restart2();
+			try {
+				boolean connect=restart.getSystem(address+"/system", login, password);
+				if (connect==false){
+					Connection_Dialog connectionDialog=new Connection_Dialog();
+					connectionDialog.setVisible(true);
+					address=connectionDialog.getAddress();
+					login=connectionDialog.getLogin();
+					password=connectionDialog.getPassword();
+					System.out.println(address+login+password);
+				}
+				else {JOptionPane.showMessageDialog(null,"Connection OK");}
+			} catch (IOException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	});
+	Orthanc_Connection.add(btnTestOrthancConnection);
+	Orthanc_Connection.add(btnRestartOrthancServer);
 	}
 	
 	
