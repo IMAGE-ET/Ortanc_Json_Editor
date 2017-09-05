@@ -168,6 +168,7 @@ public class IndexOrthanc {
 				IndexOrthanc.CheckModalityHost=false;
 	}
 	
+	// permet de creer le JSON avant de l'ecrire
 	@SuppressWarnings("unchecked")
 	public void construireIndex() {
 		
@@ -176,8 +177,6 @@ public class IndexOrthanc {
 		buildDicom(dicomNode);
 		buildContentType(contentType);
 		buildDictionary(dictionary);
-		
-		
 		
 		//On rentre les valeurs contenue dans les variables
 		index.put("Name", orthancName);
@@ -249,6 +248,12 @@ public class IndexOrthanc {
 		//on ajoute l'utilisateur a l'array de users
 		users.put(user, password);
 	}
+	
+	/**
+	 * Ajoute des metadata
+	 * @param user
+	 * @param number
+	 */
 	
 	@SuppressWarnings("unchecked")
 	protected static void addUserMetadata(String user, int number) {
@@ -322,15 +327,6 @@ public class IndexOrthanc {
 		IndexOrthanc.orthancPeer.put(nom,orthancPeer); 
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void buildOrthancPeer(HashMap<String,JSONArray> peers) {
-		String[] noms=new String[peers.size()];
-		peers.keySet().toArray(noms);
-		for (int i=0 ; i<peers.size() ; i++) {
-			IndexOrthanc.orthancPeers.put(noms[i], peers.get(noms[i]));
-		}
-	}
-	
 	/**
 	 * Ajoute les content type dans la hashmap
 	 * @param name
@@ -345,15 +341,15 @@ public class IndexOrthanc {
 		IndexOrthanc.contentType.put(name,contentType); 
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void buildContentType(HashMap<String,JSONArray> contentType) {
-		String[] noms=new String[contentType.size()];
-		contentType.keySet().toArray(noms);
-		for (int i=0 ; i<contentType.size() ; i++) {
-			this.contentTypes.put(noms[i], contentType.get(noms[i]));
-		}
-	}
-	
+	/**
+	 * Ajoute des valeurs dans le dictionnaire
+	 * @param name
+	 * @param vr
+	 * @param tag
+	 * @param minimum
+	 * @param maximum
+	 * @param privateCreator
+	 */
 	@SuppressWarnings("unchecked")
 	protected static void addDictionary(String name, String vr, String tag, int minimum, int maximum, String privateCreator) {
 		JSONArray dictionary=new JSONArray();
@@ -365,6 +361,27 @@ public class IndexOrthanc {
 		IndexOrthanc.dictionary.put(name,dictionary); 
 	}
 	
+	// les build permet de generer les Objet JSON qui seront mis dans le JSON global
+	
+	@SuppressWarnings("unchecked")
+	public void buildOrthancPeer(HashMap<String,JSONArray> peers) {
+		String[] noms=new String[peers.size()];
+		peers.keySet().toArray(noms);
+		for (int i=0 ; i<peers.size() ; i++) {
+			IndexOrthanc.orthancPeers.put(noms[i], peers.get(noms[i]));
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void buildContentType(HashMap<String,JSONArray> contentType) {
+		String[] noms=new String[contentType.size()];
+		contentType.keySet().toArray(noms);
+		for (int i=0 ; i<contentType.size() ; i++) {
+			this.contentTypes.put(noms[i], contentType.get(noms[i]));
+		}
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	public void buildDictionary(HashMap<String,JSONArray> dictionary) {
 		String[] noms=new String[dictionary.size()];
@@ -374,7 +391,11 @@ public class IndexOrthanc {
 		}
 	}
 	
-	//Permet d'ecrire un objet JSON dans un fichier
+	/**
+	 * Permet d'ecrire le JSON final dans un fichier
+	 * @param json
+	 * @param fichier
+	 */
 	public void writeJson(JSONObject json, File fichier) {
 		//Pour un export plus lisible on utilise Gson
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();

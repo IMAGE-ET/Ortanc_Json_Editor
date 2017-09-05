@@ -46,6 +46,10 @@ public class JsonParser extends IndexOrthanc {
 		gui.window.setVisible(true);
 	}
 	
+	/**
+	 * Permet de lire un fichier et enlever les commentaires avec JSmin
+	 * @throws Exception
+	 */
 	protected void definitionFichier() throws Exception {
 		 try {
 		 reader= new FileReader(fichierInput);
@@ -59,7 +63,7 @@ public class JsonParser extends IndexOrthanc {
 		
 	}
 	
-	//Permet de lire le Json et de stocker les objet dans orthancJson
+	//Permet de lire le Json et de stocker les objets dans orthancJson
 	protected void jsonParser() throws IOException, ParseException {
 		 //Parser le fichier JSON dans l'objet
 		 try {
@@ -69,9 +73,11 @@ public class JsonParser extends IndexOrthanc {
 		 parserOrthancJson();
 		
 	}
+	
 	//Evnoie le resultat du parsing dans les variables de l'index qui sert a produire le nouveau Json
 	@SuppressWarnings("unchecked")
 	protected void parserOrthancJson() throws ParseException {
+		//Boucle try pour eviter de bloquer en cas d'element manquant lors du parsing (version anterieure de JSON par exemple)
 		try {
 			orthancName=(String) orthancJson.get("Name");
 			storageDirectory=(String) orthancJson.get("StorageDirectory");
@@ -122,39 +128,37 @@ public class JsonParser extends IndexOrthanc {
 			LoadPrivateDictionary=(boolean) orthancJson.get("LoadPrivateDictionary");
 			CheckModalityHost=(boolean)orthancJson.get("DicomCheckModalityHost");
 			DicomAlwaysStore=(boolean)orthancJson.get("DicomAlwaysAllowStore");
+			
+			//On recupere les autres objet JSON dans le JSON principal
+			//on recupere les AET declares par un nouveau parser
+			JSONParser parser = new JSONParser();
+			IndexOrthanc.dicomNode= (JSONObject) parser.parse(orthancJson.get("DicomModalities").toString());
+			
+			//On recupere les users
+			IndexOrthanc.users= (JSONObject) parser.parse(orthancJson.get("RegisteredUsers").toString());
+			
+			// On recupere les Lua scripts
+			IndexOrthanc.luaFolder= (JSONArray) parser.parse(orthancJson.get("LuaScripts").toString());
+			
+			// On recupere les plugins
+			IndexOrthanc.pluginsFolder= (JSONArray) parser.parse(orthancJson.get("Plugins").toString());
+			
+			//On recupere les metadata
+			IndexOrthanc.userMetadata= (JSONObject) parser.parse(orthancJson.get("UserMetadata").toString());
+			
+			// On recupere les dictionnary
+			IndexOrthanc.dictionary= (JSONObject) parser.parse(orthancJson.get("Dictionary").toString());
+			
+			// On recupere les Content
+			IndexOrthanc.contentType= (JSONObject) parser.parse(orthancJson.get("UserContentType").toString());
+			
+			// On recupere les Peer
+			IndexOrthanc.orthancPeer=(JSONObject) parser.parse(orthancJson.get("OrthancPeers").toString());
+			
 		}
-		catch (NullPointerException e) {
-        }
-		
-		
-		
-		//on recupere les AET declares par un nouveau parser
-		JSONParser parser = new JSONParser();
-		IndexOrthanc.dicomNode= (JSONObject) parser.parse(orthancJson.get("DicomModalities").toString());
-		
-		//On recupere les users
-		IndexOrthanc.users= (JSONObject) parser.parse(orthancJson.get("RegisteredUsers").toString());
-		
-		// On recupere les Lua scripts
-		IndexOrthanc.luaFolder= (JSONArray) parser.parse(orthancJson.get("LuaScripts").toString());
-		
-		// On recupere les plugins
-		IndexOrthanc.pluginsFolder= (JSONArray) parser.parse(orthancJson.get("Plugins").toString());
-		
-		//On recupere les metadata
-		IndexOrthanc.userMetadata= (JSONObject) parser.parse(orthancJson.get("UserMetadata").toString());
-		
-		// On recupere les dictionnary
-		IndexOrthanc.dictionary= (JSONObject) parser.parse(orthancJson.get("Dictionary").toString());
-		
-		// On recupere les Content
-		IndexOrthanc.contentType= (JSONObject) parser.parse(orthancJson.get("UserContentType").toString());
-		
-		// On recupere les Peer
-		IndexOrthanc.orthancPeer=(JSONObject) parser.parse(orthancJson.get("OrthancPeers").toString());
-		
+		catch (NullPointerException e) {}
 	}
-	
+		
 
 
 }

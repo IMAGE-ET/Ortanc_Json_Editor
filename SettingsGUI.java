@@ -41,12 +41,11 @@ import javax.swing.JFileChooser;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
+import javax.swing.SwingConstants;
 
 
 public class SettingsGUI extends JsonParser {
@@ -62,15 +61,15 @@ public class SettingsGUI extends JsonParser {
 	private JLabel storage_value;
 	private JLabel SSL_Certif_String;
 	private JLabel HTTPS_CA_Certificates;
-	protected static JLabel plugin_value;
-	protected static JLabel lua_value;
-	protected static JLabel Login_pass_String;
-	protected static JLabel label_Peer_number;
-	protected static JLabel Dicom_Modalities_Number;
-	protected static JLabel Dictionnary_Counter;
+	private static JLabel plugin_value;
+	private static JLabel lua_value;
+	private static JLabel Login_pass_String;
+	private static JLabel label_Peer_number;
+	private static JLabel Dicom_Modalities_Number;
+	private static JLabel Dictionnary_Counter;
 	private JLabel Content_Type_Counter;
 	private JLabel Metadata_Counter;
-	private String address="http://localhost:8043";
+	private String address="http://localhost:8042";
 	private String login;
 	private String password;
 
@@ -196,6 +195,8 @@ public class SettingsGUI extends JsonParser {
 		public void actionPerformed(ActionEvent arg0) {
 				FolderDialog dialoglua=new FolderDialog(true);
 				dialoglua.setVisible(true);
+				lua_value.setText(String.valueOf(IndexOrthanc.luaFolder.size()));
+				
 			}
 	});
 	boutton_general.add(btnLuaScripts);
@@ -206,6 +207,7 @@ public class SettingsGUI extends JsonParser {
 		public void actionPerformed(ActionEvent e) {
 			FolderDialog folderDialog=new FolderDialog(false);
 			folderDialog.setVisible(true);
+			plugin_value.setText(String.valueOf(IndexOrthanc.pluginsFolder.size()));
 		}
 	});
 	boutton_general.add(btnPlugins);
@@ -217,15 +219,13 @@ public class SettingsGUI extends JsonParser {
 	JLabel lblIndexdirectory = new JLabel("IndexDirectory");
 	General_Strings.add(lblIndexdirectory);
 	
-	index_value = new JLabel("New label");
+	index_value = new JLabel(indexDirectory);
 	General_Strings.add(index_value);
-	index_value.setText(indexDirectory);
 	
 	JLabel lblStoragedirectory = new JLabel("StorageDirectory");
 	General_Strings.add(lblStoragedirectory);
 	
-	storage_value = new JLabel("New label");
-	storage_value.setText(storageDirectory);
+	storage_value = new JLabel(storageDirectory);
 	General_Strings.add(storage_value);
 	
 	JLabel lblLua = new JLabel("Lua");
@@ -554,6 +554,7 @@ public class SettingsGUI extends JsonParser {
 		public void actionPerformed(ActionEvent e) {
 			UserDialog userDialog=new UserDialog();
 			userDialog.setVisible(true);
+			Login_pass_String.setText(String.valueOf(IndexOrthanc.users.size()));
 		}
 	});
 	HTTP_Security_Buttons.add(btnUsersLoginpassword);
@@ -596,6 +597,8 @@ public class SettingsGUI extends JsonParser {
 			// On lance la boite de dialog pour gerer les AET
 			DicomDialog dicomDialog=new DicomDialog();
 			dicomDialog.setVisible(true);
+			Dicom_Modalities_Number.setText(String.valueOf(IndexOrthanc.dicomNode.size()));
+			
 			
 		}
 	});
@@ -646,6 +649,7 @@ public class SettingsGUI extends JsonParser {
 			PeersDialog peerDialog=new PeersDialog();
 			peerDialog.setVisible(true);
 			peerDialog.setAlwaysOnTop(true);
+			label_Peer_number.setText(String.valueOf(IndexOrthanc.orthancPeer.size()));
 		}
 	});
 	Network_Buttons.add(btnOrthancPeers);
@@ -1006,6 +1010,7 @@ public class SettingsGUI extends JsonParser {
 			Dictionary_Dialog dictionaryDialog=new Dictionary_Dialog();
 			dictionaryDialog.setVisible(true);
 			dictionaryDialog.setAlwaysOnTop(true);
+			Dictionnary_Counter.setText(String.valueOf(IndexOrthanc.dictionary.size()));
 		}
 	});
 	About_Buttons.add(btnDictionnary);
@@ -1037,6 +1042,9 @@ public class SettingsGUI extends JsonParser {
 	JLabel label = new JLabel("Orthanc JSON Editor");
 	panel_5.add(label);
 	
+	JPanel panel_2 = new JPanel();
+	panel_1.add(panel_2, BorderLayout.WEST);
+	
 	JPanel buttons = new JPanel();
 	buttons.setBorder(new LineBorder(new Color(0, 0, 0)));
 	window.getContentPane().add(buttons);
@@ -1052,27 +1060,16 @@ public class SettingsGUI extends JsonParser {
 	buttons.add(Bouttons_Bouttons, BorderLayout.CENTER);
 	Bouttons_Bouttons.setLayout(new GridLayout(0, 2, 0, 0));
 	
-	JButton btnSaveJson = new JButton("Save JSON");
-	btnSaveJson.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-			//On ecrit le JSON defini dans Index Orthanc
-			construireIndex();
-			JFileChooser fc =new JFileChooser();
-			int ouvrir=fc.showOpenDialog(null);
-			//Si valide
-			if (ouvrir==JFileChooser.APPROVE_OPTION) {
-				File output=fc.getSelectedFile();
-				writeJson(index,output);
-		}
-		}
-	});
+	JPanel Orthanc_Version_Panel = new JPanel();
+	Bouttons_Bouttons.add(Orthanc_Version_Panel);
+	Orthanc_Version_Panel.setLayout(new BorderLayout(0, 0));
 	
-	JPanel panel_2 = new JPanel();
-	Bouttons_Bouttons.add(panel_2);
+	JLabel lblNewLabel_5 = new JLabel("For Orthanc 1.3.0");
+	lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+	Orthanc_Version_Panel.add(lblNewLabel_5, BorderLayout.SOUTH);
 	
-	JPanel panel_3 = new JPanel();
-	Bouttons_Bouttons.add(panel_3);
-	Bouttons_Bouttons.add(btnSaveJson);
+	JPanel panel_6 = new JPanel();
+	Bouttons_Bouttons.add(panel_6);
 	
 	JButton btnLoadJson = new JButton("Load JSON");
 	btnLoadJson.addActionListener(new ActionListener() {
@@ -1107,6 +1104,22 @@ public class SettingsGUI extends JsonParser {
 		
 	});
 	Bouttons_Bouttons.add(btnLoadJson);
+	
+	JButton btnSaveJson = new JButton("Save JSON");
+	btnSaveJson.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			//On ecrit le JSON defini dans Index Orthanc
+			construireIndex();
+			JFileChooser fc =new JFileChooser();
+			int ouvrir=fc.showOpenDialog(null);
+			//Si valide
+			if (ouvrir==JFileChooser.APPROVE_OPTION) {
+				File output=fc.getSelectedFile();
+				writeJson(index,output);
+		}
+		}
+	});
+	Bouttons_Bouttons.add(btnSaveJson);
 	
 	JPanel Orthanc_Connection = new JPanel();
 	buttons.add(Orthanc_Connection, BorderLayout.SOUTH);

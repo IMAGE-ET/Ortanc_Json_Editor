@@ -116,8 +116,6 @@ public class PeersDialog extends JDialog {
 						for (int i=0; i<table.getRowCount();i++){
 							IndexOrthanc.addorthancPeer(table.getValueAt(i, 0).toString(), table.getValueAt(i, 1).toString(), table.getValueAt(i, 2).toString(), table.getValueAt(i, 3).toString());
 						}
-						//On update le compteur
-						SettingsGUI.label_Peer_number.setText(String.valueOf(IndexOrthanc.orthancPeer.size()));
 						//on quite
 						dispose();
 						

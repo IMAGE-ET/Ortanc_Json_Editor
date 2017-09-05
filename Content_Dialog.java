@@ -18,6 +18,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
@@ -95,6 +96,19 @@ public class Content_Dialog extends JDialog {
 						
 					}
 				});
+				{
+					JButton btnInfo = new JButton("Info");
+					btnInfo.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							String message="Dictionary of symbolic names for the user-defined types of attached files. \n"
+									+ "Each entry must map an unique string to an unique number between 1024 and 65535. \n"
+									+ "Optionally, a second argument can provided to specify a MIME content type for the attachment.";
+							JOptionPane.showMessageDialog(null,message);
+
+						}
+					});
+					buttonPane.add(btnInfo);
+				}
 				buttonPane.add(btnAdd);
 			}
 			{

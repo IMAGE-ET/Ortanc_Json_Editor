@@ -113,8 +113,6 @@ public class UserDialog extends JDialog {
 							//On ajoute les users un a un
 							IndexOrthanc.addusers(table.getValueAt(i, 0).toString(), table.getValueAt(i, 1).toString());
 						}
-						//On update le label
-						SettingsGUI.Login_pass_String.setText(String.valueOf(IndexOrthanc.users.size()));
 						//On quitte
 						dispose();
 					}

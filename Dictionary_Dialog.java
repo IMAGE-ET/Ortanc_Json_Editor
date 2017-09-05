@@ -18,6 +18,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
@@ -60,7 +61,7 @@ public class Dictionary_Dialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
 			table = new JTable();
-			table.setModel(new DefaultTableModel(new String[] {"Name","Tag", "VR", "Min", "Maximum", "Private Creator"},0));
+			table.setModel(new DefaultTableModel(new String[] {"Name","Nickname", "VR", "Minimum", "Maximum", "Private Creator"},0));
 			table.putClientProperty("terminateEditOnFocusLost", true);
 			model = (DefaultTableModel) table.getModel();
 			//Ajout des Dictionnary existant
@@ -69,7 +70,7 @@ public class Dictionary_Dialog extends JDialog {
 				IndexOrthanc.dictionary.keySet().toArray(indexDictionary);
 				for (int i=0 ; i<indexDictionary.length; i++){
 					JSONArray dictionaire=IndexOrthanc.dictionary.get(indexDictionary[i]);
-					model.addRow(new Object[]{"Name","Tag", "VR", "Min", "Maximum", "Private Creator"});
+					model.addRow(new Object[]{"Name","Nickname", "VR", "Min", "Maximum", "Private Creator"});
 					table.setValueAt(indexDictionary[i], i, 0);
 					table.setValueAt(dictionaire.get(0).toString(), i, 1);
 					table.setValueAt(dictionaire.get(1).toString(), i, 2);
@@ -97,9 +98,25 @@ public class Dictionary_Dialog extends JDialog {
 				JButton btnAdd = new JButton("Add");
 				btnAdd.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						model.addRow(new Object[] {"Name","Tag", "VR", "1", "1", "Private Creator"});
+						model.addRow(new Object[] {"Name","NickName", "VR", "1", "1", "Private Creator"});
 					}
 				});
+				{
+					JButton btnInfo = new JButton("Info");
+					btnInfo.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							String message= "A new tag in the dictionary of DICOM tags that are known to Orthanc.\n"
+									+ "Each line must contain the Name of tag (formatted as 2 hexadecimal numbers), \n"
+									+ "the value representation (2 upcase characters),\n"
+									+ "a nickname for the tag, \n"
+									+ "possibly the minimum multiplicity (> 0 with defaults to 1), \n"
+									+ "possibly the maximum multiplicity (0 means arbitrary multiplicity, defaults to 1), and \n"
+									+ "possibly the Private Creator (for private tags)";
+									JOptionPane.showMessageDialog(null,message);
+						}
+					});
+					buttonPane.add(btnInfo);
+				}
 				buttonPane.add(btnAdd);
 			}
 			{
@@ -123,8 +140,6 @@ public class Dictionary_Dialog extends JDialog {
 						for (int i=0; i<table.getRowCount();i++){
 							IndexOrthanc.addDictionary(table.getValueAt(i, 0).toString(), table.getValueAt(i, 1).toString(),table.getValueAt(i, 2).toString(), Integer.parseInt(table.getValueAt(i, 3).toString()), Integer.parseInt(table.getValueAt(i, 4).toString()), table.getValueAt(i, 5).toString());
 						}
-						//on update le counter
-						SettingsGUI.Dictionnary_Counter.setText(String.valueOf(IndexOrthanc.dictionary.size()));
 						//On ferme
 						dispose();
 					}

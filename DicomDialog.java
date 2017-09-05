@@ -20,7 +20,6 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -159,8 +158,6 @@ public class DicomDialog extends JDialog {
 						for (int i=0; i<table.getRowCount(); i++){
 							IndexOrthanc.addDicomNode(table.getValueAt(i, 0).toString(), table.getValueAt(i, 1).toString(), table.getValueAt(i, 2).toString(), Integer.valueOf(table.getValueAt(i, 3).toString()), table.getValueAt(i, 4).toString());
 						}
-						//On update le compteur
-						SettingsGUI.Dicom_Modalities_Number.setText(String.valueOf(IndexOrthanc.dicomNode.size()));
 						//on ferme
 						dispose();
 					}

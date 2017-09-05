@@ -18,6 +18,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
@@ -95,6 +96,19 @@ public class Dialog_Metadata extends JDialog {
 					
 					}
 				});
+				{
+					JButton btnHelp = new JButton("Info");
+					btnHelp.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							
+							String message="Dictionary of symbolic names for the user-defined metadata.\n"
+									+ "Each entry must map an unique string to an unique number between 1024 and 65535. \n "
+									+ "Reserved values: The Orthanc whole-slide imaging plugin uses metadata 4200";
+							JOptionPane.showMessageDialog(null,message);
+						}
+					});
+					buttonPane.add(btnHelp);
+				}
 				buttonPane.add(btnAdd);
 			}
 			{

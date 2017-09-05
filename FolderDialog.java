@@ -125,8 +125,6 @@ public class FolderDialog extends JDialog {
 							if (lua)IndexOrthanc.addLua(model.getValueAt(i, 0).toString()); 
 						}
 						dispose();
-						if (!lua) SettingsGUI.plugin_value.setText(String.valueOf(IndexOrthanc.pluginsFolder.size()));
-						if (lua) SettingsGUI.lua_value.setText(String.valueOf(IndexOrthanc.luaFolder.size()));
 						
 					}
 				});
