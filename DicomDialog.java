@@ -82,7 +82,9 @@ public class DicomDialog extends JDialog {
 						table.setValueAt(IndexOrthanc.dicomNode.get(aetDispo[i]).get(0).toString(), i, 1);
 						table.setValueAt(IndexOrthanc.dicomNode.get(aetDispo[i]).get(1).toString(), i, 2);
 						table.setValueAt(IndexOrthanc.dicomNode.get(aetDispo[i]).get(2).toString(), i, 3);
-						table.setValueAt(IndexOrthanc.dicomNode.get(aetDispo[i]).get(3).toString(), i, 4);
+						//Le manifacturer n'est pas obligatoire
+						if (IndexOrthanc.dicomNode.get(aetDispo[i]).size()==3) table.setValueAt("Generic", i, 4);
+						if (IndexOrthanc.dicomNode.get(aetDispo[i]).size()==4) table.setValueAt(IndexOrthanc.dicomNode.get(aetDispo[i]).get(3).toString(), i, 4);
 					}
 				
 					
