@@ -113,7 +113,8 @@ public class IndexOrthanc {
 	protected static boolean DicomAlwaysStore;
 	protected static boolean CheckModalityHost;
 	
-	public IndexOrthanc() {	
+	public IndexOrthanc() {
+		initialiserIndex();
 	}
 	
 	protected void initialiserIndex() {

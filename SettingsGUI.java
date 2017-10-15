@@ -48,12 +48,14 @@ import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 
 
-public class SettingsGUI extends JsonParser {
+public class SettingsGUI extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7041807507652097056L;
 	private JTextField txtOrthanc;
 	private JTextField textfield_Http_Port;
-	
-	JFrame window=new JFrame();
 	private JTextField textField_AET_Name;
 	private JTextField textField_AET_Port;
 	private JTextField textField_HTTP_Proxy;
@@ -61,29 +63,28 @@ public class SettingsGUI extends JsonParser {
 	private JLabel storage_value;
 	private JLabel SSL_Certif_String;
 	private JLabel HTTPS_CA_Certificates;
-	private static JLabel plugin_value;
-	private static JLabel lua_value;
-	private static JLabel Login_pass_String;
-	private static JLabel label_Peer_number;
-	private static JLabel Dicom_Modalities_Number;
-	private static JLabel Dictionnary_Counter;
+	private JLabel plugin_value;
+	private JLabel lua_value;
+	private JLabel Login_pass_String;
+	private JLabel label_Peer_number;
+	private JLabel Dicom_Modalities_Number;
+	private JLabel Dictionnary_Counter;
 	private JLabel Content_Type_Counter;
 	private JLabel Metadata_Counter;
 	private String address="http://localhost:8042";
 	private String login;
 	private String password;
+	private static JsonParser jsonParser= new JsonParser();
+	
 
 	public SettingsGUI() {
-	//On initialiser l'index pour avoir les valeurs par defaut au demarrage
-	initialiserIndex();
-	//On cree la Frame...
-	window.getContentPane().setLayout(new GridLayout(3, 3, 0, 0));
-	window.setTitle("Orthanc JSON editor");
-	window.setPreferredSize(new Dimension(1400, 700));
-	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	getContentPane().setLayout(new GridLayout(3, 3, 0, 0));
+	setTitle("Orthanc JSON editor");
+	setPreferredSize(new Dimension(1400, 700));
+	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	JPanel General = new JPanel();
 	General.setBorder(new LineBorder(new Color(0, 0, 0)));
-	window.getContentPane().add(General);
+	getContentPane().add(General);
 	General.setLayout(new BorderLayout(0, 0));
 	
 	JPanel Titre = new JPanel();
@@ -100,7 +101,7 @@ public class SettingsGUI extends JsonParser {
 	boutton_general.add(lblNewLabel);
 	
 	txtOrthanc = new JTextField();
-	txtOrthanc.setText(orthancName);
+	txtOrthanc.setText(JsonParser.orthancName);
 	txtOrthanc.addFocusListener(new FocusAdapter() {
 		@Override
 		public void focusLost(FocusEvent arg0) {
@@ -124,7 +125,7 @@ public class SettingsGUI extends JsonParser {
 	});
 	spinner_Max_Storage_Size.setPreferredSize(new Dimension(50, 20));
 	spinner_Max_Storage_Size.setModel(new SpinnerNumberModel (0.0, 0.0, null, 1.0));
-	spinner_Max_Storage_Size.setValue(MaximumStorageSize);
+	spinner_Max_Storage_Size.setValue(JsonParser.MaximumStorageSize);
 	boutton_general.add(spinner_Max_Storage_Size);
 	
 	JButton btnNewButton_1 = new JButton("Index Directory");
@@ -138,7 +139,7 @@ public class SettingsGUI extends JsonParser {
 			//Si valide
 			if (ouvrir==JFileChooser.APPROVE_OPTION) {
 				IndexOrthanc.indexDirectory=fc.getSelectedFile().getAbsolutePath().toString();
-				index_value.setText(indexDirectory);
+				index_value.setText(JsonParser.indexDirectory);
 			}
 			
 		}});
@@ -158,7 +159,7 @@ public class SettingsGUI extends JsonParser {
 	});
 	spinner_Max_Patient_Count.setPreferredSize(new Dimension(50, 20));
 	spinner_Max_Patient_Count.setModel(new SpinnerNumberModel (0.0, 0.0, null, 1.0));
-	spinner_Max_Patient_Count.setValue(MaximumPatientCount);
+	spinner_Max_Patient_Count.setValue(JsonParser.MaximumPatientCount);
 	boutton_general.add(spinner_Max_Patient_Count);
 	
 	JButton btnNewButton = new JButton("Storage Directory");
@@ -172,7 +173,7 @@ public class SettingsGUI extends JsonParser {
 				//Si valide
 				if (ouvrir==JFileChooser.APPROVE_OPTION) {
 					IndexOrthanc.storageDirectory=fc.getSelectedFile().getAbsolutePath().toString();
-					storage_value.setText(storageDirectory);
+					storage_value.setText(JsonParser.storageDirectory);
 				}
 			}
 	});
@@ -186,7 +187,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.StorageCompression=rdbtnNewRadioButton.isSelected();
 		}
 	});
-	rdbtnNewRadioButton.setSelected(StorageCompression);
+	rdbtnNewRadioButton.setSelected(JsonParser.StorageCompression);
 	boutton_general.add(rdbtnNewRadioButton);
 	
 	JButton btnLuaScripts = new JButton("Lua Scripts");
@@ -219,13 +220,13 @@ public class SettingsGUI extends JsonParser {
 	JLabel lblIndexdirectory = new JLabel("IndexDirectory");
 	General_Strings.add(lblIndexdirectory);
 	
-	index_value = new JLabel(indexDirectory);
+	index_value = new JLabel(JsonParser.indexDirectory);
 	General_Strings.add(index_value);
 	
 	JLabel lblStoragedirectory = new JLabel("StorageDirectory");
 	General_Strings.add(lblStoragedirectory);
 	
-	storage_value = new JLabel(storageDirectory);
+	storage_value = new JLabel(JsonParser.storageDirectory);
 	General_Strings.add(storage_value);
 	
 	JLabel lblLua = new JLabel("Lua");
@@ -242,7 +243,7 @@ public class SettingsGUI extends JsonParser {
 	
 	JPanel http_Config = new JPanel();
 	http_Config.setBorder(new LineBorder(new Color(0, 0, 0)));
-	window.getContentPane().add(http_Config);
+	getContentPane().add(http_Config);
 	http_Config.setLayout(new BorderLayout(0, 0));
 	
 	JPanel Titre_Http = new JPanel();
@@ -262,7 +263,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.HttpServerEnabled=rdbtnHttpServerEnabled.isSelected();
 		}
 	});
-	rdbtnHttpServerEnabled.setSelected(HttpServerEnabled);
+	rdbtnHttpServerEnabled.setSelected(JsonParser.HttpServerEnabled);
 	http_bouttons.add(rdbtnHttpServerEnabled);
 	
 	textfield_Http_Port = new JTextField();
@@ -288,7 +289,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.HttpDescribeErrors=rdbtnHttpDescribeErrors.isSelected();
 		}
 	});
-	rdbtnHttpDescribeErrors.setSelected(HttpDescribeErrors);
+	rdbtnHttpDescribeErrors.setSelected(JsonParser.HttpDescribeErrors);
 	http_bouttons.add(rdbtnHttpDescribeErrors);
 	
 	JCheckBox rdbtnHttpCompression = new JCheckBox("HTTP Compression");
@@ -299,12 +300,12 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.HttpCompressionEnabled=rdbtnHttpCompression.isSelected();
 		}
 	});
-	rdbtnHttpCompression.setSelected(HttpCompressionEnabled);
+	rdbtnHttpCompression.setSelected(JsonParser.HttpCompressionEnabled);
 	http_bouttons.add(rdbtnHttpCompression);
 	
 	JPanel dicomServer_config = new JPanel();
 	dicomServer_config.setBorder(new LineBorder(new Color(0, 0, 0)));
-	window.getContentPane().add(dicomServer_config);
+	getContentPane().add(dicomServer_config);
 	dicomServer_config.setLayout(new BorderLayout(0, 0));
 	
 	JPanel Titre_DicomServer = new JPanel();
@@ -324,7 +325,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.HttpServerEnabled=rdbtnServerEnabled.isSelected();
 		}
 	});
-	rdbtnServerEnabled.setSelected(DicomServerEnabled);
+	rdbtnServerEnabled.setSelected(JsonParser.DicomServerEnabled);
 	Boutton_DicomServer.add(rdbtnServerEnabled);
 	
 	JCheckBox rdbtnCheckCalledAet = new JCheckBox("Check AET");
@@ -335,7 +336,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.DicomCheckCalledAet=rdbtnCheckCalledAet.isSelected();
 		}
 	});
-	rdbtnCheckCalledAet.setSelected(DicomCheckCalledAet);
+	rdbtnCheckCalledAet.setSelected(JsonParser.DicomCheckCalledAet);
 	Boutton_DicomServer.add(rdbtnCheckCalledAet);
 	
 	JLabel lblAetName = new JLabel("AET Name");
@@ -351,7 +352,7 @@ public class SettingsGUI extends JsonParser {
 	});
 	Boutton_DicomServer.add(textField_AET_Name);
 	textField_AET_Name.setColumns(10);
-	textField_AET_Name.setText(DicomAet);
+	textField_AET_Name.setText(JsonParser.DicomAet);
 	
 	JLabel lblNewLabel_3 = new JLabel("Port");
 	lblNewLabel_3.setToolTipText("The DICOM port");
@@ -366,7 +367,7 @@ public class SettingsGUI extends JsonParser {
 	});
 	Boutton_DicomServer.add(textField_AET_Port);
 	textField_AET_Port.setColumns(5);
-	textField_AET_Port.setText(String.valueOf(DicomPort));
+	textField_AET_Port.setText(String.valueOf(JsonParser.DicomPort));
 	
 	JCheckBox rdbtnUnknowSop = new JCheckBox("Unknow SOP");
 	rdbtnUnknowSop.setToolTipText("Whether Orthanc accepts to act as C-Store SCP for unknown storage SOP classes (aka. \"promiscuous mode\")");
@@ -376,7 +377,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.UnknownSopClassAccepted=rdbtnUnknowSop.isSelected();
 		}
 	});
-	rdbtnUnknowSop.setSelected(UnknownSopClassAccepted);
+	rdbtnUnknowSop.setSelected(JsonParser.UnknownSopClassAccepted);
 	Boutton_DicomServer.add(rdbtnUnknowSop);
 	
 	JLabel lblScpTimout = new JLabel("SCP Timout");
@@ -405,7 +406,7 @@ public class SettingsGUI extends JsonParser {
 	JLabel lblTransferSyntax = new JLabel("Transfer Syntax :");
 	lblTransferSyntax.setToolTipText("The transfer syntaxes that are accepted by Orthanc C-Store SCP");
 	Boutton_DicomServer.add(lblTransferSyntax);
-	chckbxDeflatedTs.setSelected(DeflatedTransferSyntaxAccepted);
+	chckbxDeflatedTs.setSelected(JsonParser.DeflatedTransferSyntaxAccepted);
 	Boutton_DicomServer.add(chckbxDeflatedTs);
 	
 	JCheckBox chckbxJpegTs = new JCheckBox("JPEG TS");
@@ -415,7 +416,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.JpegTransferSyntaxAccepted=chckbxJpegTs.isSelected();
 		}
 	});
-	chckbxJpegTs.setSelected(JpegTransferSyntaxAccepted);
+	chckbxJpegTs.setSelected(JsonParser.JpegTransferSyntaxAccepted);
 	Boutton_DicomServer.add(chckbxJpegTs);
 	
 	JCheckBox chckbxJpegTs_1 = new JCheckBox("JPEG 2000 TS");
@@ -425,7 +426,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.Jpeg2000TransferSyntaxAccepted=chckbxJpegTs_1.isSelected();
 		}
 	});
-	chckbxJpegTs_1.setSelected(Jpeg2000TransferSyntaxAccepted);
+	chckbxJpegTs_1.setSelected(JsonParser.Jpeg2000TransferSyntaxAccepted);
 	Boutton_DicomServer.add(chckbxJpegTs_1);
 	
 	JCheckBox chckbxJpegLoselessTs = new JCheckBox("JPEG loseless TS");
@@ -435,7 +436,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.JpegLosslessTransferSyntaxAccepted=chckbxJpegLoselessTs.isSelected();
 		}
 	});
-	chckbxJpegLoselessTs.setSelected(JpegLosslessTransferSyntaxAccepted);
+	chckbxJpegLoselessTs.setSelected(JsonParser.JpegLosslessTransferSyntaxAccepted);
 	Boutton_DicomServer.add(chckbxJpegLoselessTs);
 	
 	JCheckBox chckbxJpipTs = new JCheckBox("JPIP TS");
@@ -445,7 +446,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.JpipTransferSyntaxAccepted=chckbxJpipTs.isSelected();
 		}
 	});
-	chckbxJpipTs.setSelected(JpipTransferSyntaxAccepted);
+	chckbxJpipTs.setSelected(JsonParser.JpipTransferSyntaxAccepted);
 	Boutton_DicomServer.add(chckbxJpipTs);
 	
 	JCheckBox chckbxMpegTs = new JCheckBox("MPEG2 TS");
@@ -455,7 +456,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.Mpeg2TransferSyntaxAccepted=chckbxMpegTs.isSelected();
 		}
 	});
-	chckbxMpegTs.setSelected(Mpeg2TransferSyntaxAccepted);
+	chckbxMpegTs.setSelected(JsonParser.Mpeg2TransferSyntaxAccepted);
 	Boutton_DicomServer.add(chckbxMpegTs);
 	
 	JCheckBox chckbxRleTs = new JCheckBox("RLE TS");
@@ -465,7 +466,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.RleTransferSyntaxAccepted=chckbxRleTs.isSelected();
 		}
 	});
-	chckbxRleTs.setSelected(RleTransferSyntaxAccepted);
+	chckbxRleTs.setSelected(JsonParser.RleTransferSyntaxAccepted);
 	Boutton_DicomServer.add(chckbxRleTs);
 	
 	JPanel panel = new JPanel();
@@ -486,7 +487,7 @@ public class SettingsGUI extends JsonParser {
 	
 	JPanel http_security = new JPanel();
 	http_security.setBorder(new LineBorder(new Color(0, 0, 0)));
-	window.getContentPane().add(http_security);
+	getContentPane().add(http_security);
 	http_security.setLayout(new BorderLayout(0, 0));
 	
 	JPanel HTTP_Security_Title = new JPanel();
@@ -506,7 +507,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.RemoteAccessAllowed=chckbxAllowRemoteAccess.isSelected();
 		}
 	});
-	chckbxAllowRemoteAccess.setSelected(RemoteAccessAllowed);
+	chckbxAllowRemoteAccess.setSelected(JsonParser.RemoteAccessAllowed);
 	HTTP_Security_Buttons.add(chckbxAllowRemoteAccess);
 	
 	JCheckBox chckbxSsl = new JCheckBox("SSL");
@@ -517,7 +518,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.SslEnabled=chckbxSsl.isSelected();
 		}
 	});
-	chckbxSsl.setSelected(SslEnabled);
+	chckbxSsl.setSelected(JsonParser.SslEnabled);
 	HTTP_Security_Buttons.add(chckbxSsl);
 	
 	JButton btnSslCertificate = new JButton("SSL Certificate");
@@ -530,7 +531,7 @@ public class SettingsGUI extends JsonParser {
 			int ouvrir=fc.showOpenDialog(null);
 			if (ouvrir==JFileChooser.APPROVE_OPTION) {
 				IndexOrthanc.SslCertificate=fc.getSelectedFile().toString();
-				SSL_Certif_String.setText(SslCertificate);
+				SSL_Certif_String.setText(JsonParser.SslCertificate);
 			}
 			
 		}
@@ -545,7 +546,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.AuthenticationEnabled=chckbxEnableAuthentication.isSelected();
 		}
 	});
-	chckbxEnableAuthentication.setSelected(AuthenticationEnabled);
+	chckbxEnableAuthentication.setSelected(JsonParser.AuthenticationEnabled);
 	HTTP_Security_Buttons.add(chckbxEnableAuthentication);
 	
 	JButton btnUsersLoginpassword = new JButton("Users Login/Password");
@@ -578,7 +579,7 @@ public class SettingsGUI extends JsonParser {
 
 	JPanel network = new JPanel();
 	network.setBorder(new LineBorder(new Color(0, 0, 0)));
-	window.getContentPane().add(network);
+	getContentPane().add(network);
 	network.setLayout(new BorderLayout(0, 0));
 	
 	JPanel Network_Title = new JPanel();
@@ -666,7 +667,7 @@ public class SettingsGUI extends JsonParser {
 		}
 	});
 	Network_Buttons.add(textField_HTTP_Proxy);
-	textField_HTTP_Proxy.setText(HttpProxy);
+	textField_HTTP_Proxy.setText(JsonParser.HttpProxy);
 	textField_HTTP_Proxy.setColumns(10);
 	
 	JLabel lblHttpTimeout = new JLabel("HTTP timeout");
@@ -682,7 +683,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.HttpTimeout=Integer.valueOf(spinner_Http_Timeout.getValue().toString());
 		}
 	});
-	spinner_Http_Timeout.setValue(HttpTimeout);
+	spinner_Http_Timeout.setValue(JsonParser.HttpTimeout);
 	Network_Buttons.add(spinner_Http_Timeout);
 	
 	JCheckBox chckbxHttpsVerifyPeers = new JCheckBox("HTTPS verify Peers");
@@ -693,7 +694,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.HttpsVerifyPeers=chckbxHttpsVerifyPeers.isSelected();
 		}
 	});
-	chckbxHttpsVerifyPeers.setSelected(HttpsVerifyPeers);
+	chckbxHttpsVerifyPeers.setSelected(JsonParser.HttpsVerifyPeers);
 	Network_Buttons.add(chckbxHttpsVerifyPeers);
 	
 	JButton btnHttpsCaCertificates = new JButton("HTTPS CA Certificates");
@@ -738,7 +739,7 @@ public class SettingsGUI extends JsonParser {
 	
 	JPanel advanced = new JPanel();
 	advanced.setBorder(new LineBorder(new Color(0, 0, 0)));
-	window.getContentPane().add(advanced);
+	getContentPane().add(advanced);
 	advanced.setLayout(new BorderLayout(0, 0));
 	
 	JPanel Advanced_Title = new JPanel();
@@ -787,7 +788,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.StableAge=Integer.valueOf(spinner_Stable_Age.getValue().toString());
 		}
 	});
-	spinner_Stable_Age.setValue(StableAge);
+	spinner_Stable_Age.setValue(JsonParser.StableAge);
 	Advanced_Buttons.add(spinner_Stable_Age);
 	
 	JCheckBox chckbxStrictAetComparison = new JCheckBox("Strict AET Comparison");
@@ -798,7 +799,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.StrictAetComparison=chckbxStrictAetComparison.isSelected();
 		}
 	});
-	chckbxStrictAetComparison.setSelected(StrictAetComparison);
+	chckbxStrictAetComparison.setSelected(JsonParser.StrictAetComparison);
 	Advanced_Buttons.add(chckbxStrictAetComparison);
 	
 	JCheckBox chckbxStoremd = new JCheckBox("StoreMD5");
@@ -809,7 +810,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.StoreMD5ForAttachments=chckbxStoremd.isSelected();
 		}
 	});
-	chckbxStoremd.setSelected(StoreMD5ForAttachments);
+	chckbxStoremd.setSelected(JsonParser.StoreMD5ForAttachments);
 	Advanced_Buttons.add(chckbxStoremd);
 	
 	JLabel lblLimitFindResults = new JLabel("Limit Find Results");
@@ -825,7 +826,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.LimitFindResults=Integer.valueOf(spinner_limit_Find_Result.getValue().toString());
 		}
 	});
-	spinner_limit_Find_Result.setValue(LimitFindResults);
+	spinner_limit_Find_Result.setValue(JsonParser.LimitFindResults);
 	Advanced_Buttons.add(spinner_limit_Find_Result);
 	
 	JLabel lblLimitFindInstance = new JLabel("Limit Find Instance");
@@ -841,7 +842,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.LimitFindInstances=Integer.valueOf(spinner_limit_Find_Instance.getValue().toString());
 		}
 	});
-	spinner_limit_Find_Instance.setValue(LimitFindInstances);
+	spinner_limit_Find_Instance.setValue(JsonParser.LimitFindInstances);
 	Advanced_Buttons.add(spinner_limit_Find_Instance);
 	
 	JLabel lblLimitsJobs = new JLabel("Limits Jobs");
@@ -857,7 +858,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.LimitJobs=Integer.valueOf(spinner_limit_Jobs.getValue().toString());
 		}
 	});
-	spinner_limit_Jobs.setValue(LimitJobs);
+	spinner_limit_Jobs.setValue(JsonParser.LimitJobs);
 	Advanced_Buttons.add(spinner_limit_Jobs);
 	
 	JCheckBox chckbxLogExportedRessources = new JCheckBox("Log Exported Ressources");
@@ -868,7 +869,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.LogExportedResources=chckbxLogExportedRessources.isSelected();
 		}
 	});
-	chckbxLogExportedRessources.setSelected(LogExportedResources);
+	chckbxLogExportedRessources.setSelected(JsonParser.LogExportedResources);
 	Advanced_Buttons.add(chckbxLogExportedRessources);
 	
 	JCheckBox chckbxKeepAlive = new JCheckBox("Keep Alive");
@@ -879,7 +880,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.KeepAlive=chckbxKeepAlive.isSelected();
 		}
 	});
-	chckbxKeepAlive.setSelected(KeepAlive);
+	chckbxKeepAlive.setSelected(JsonParser.KeepAlive);
 	Advanced_Buttons.add(chckbxKeepAlive);
 	
 	JCheckBox chckbxStoreDicom = new JCheckBox("Store DICOM");
@@ -890,7 +891,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.StoreDicom=chckbxStoreDicom.isSelected();
 		}
 	});
-	chckbxStoreDicom.setSelected(StoreDicom);
+	chckbxStoreDicom.setSelected(JsonParser.StoreDicom);
 	Advanced_Buttons.add(chckbxStoreDicom);
 	
 	JLabel lblDicomAssociationClose = new JLabel("DICOM Association Close Delay");
@@ -906,7 +907,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.DicomAssociationCloseDelay=Integer.valueOf(spinner_DICOM_Association_Close_Delay.getValue().toString());
 		}
 	});
-	spinner_DICOM_Association_Close_Delay.setValue(DicomAssociationCloseDelay);
+	spinner_DICOM_Association_Close_Delay.setValue(JsonParser.DicomAssociationCloseDelay);
 	Advanced_Buttons.add(spinner_DICOM_Association_Close_Delay);
 	
 	JPanel Options_Strings = new JPanel();
@@ -937,7 +938,7 @@ public class SettingsGUI extends JsonParser {
 	
 	JPanel about = new JPanel();
 	about.setBorder(new LineBorder(new Color(0, 0, 0)));
-	window.getContentPane().add(about);
+	getContentPane().add(about);
 	about.setLayout(new BorderLayout(0, 0));
 	
 	JPanel About_About = new JPanel();
@@ -968,7 +969,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.QueryRetrieveSize=Integer.valueOf(spinner_QueryRetrieve_Size.getValue().toString());
 		}
 	});
-	spinner_QueryRetrieve_Size.setValue(QueryRetrieveSize);
+	spinner_QueryRetrieve_Size.setValue(JsonParser.QueryRetrieveSize);
 	
 	JCheckBox chckbxCaseSensitivePatient = new JCheckBox("Case Sensitive Patient Name");
 	chckbxCaseSensitivePatient.setToolTipText("When handling a C-Find SCP request, setting this flag to \"true\" will enable case-sensitive match for PN value representation (such as PatientName). By default, the search is case-insensitive, which does not follow the DICOM standard.");
@@ -979,7 +980,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.CaseSensitivePN=chckbxCaseSensitivePatient .isSelected();
 		}
 	});
-	chckbxCaseSensitivePatient.setSelected(CaseSensitivePN);
+	chckbxCaseSensitivePatient.setSelected(JsonParser.CaseSensitivePN);
 	
 	JCheckBox chckbxAllowFindSop = new JCheckBox("Allow Find SOP classe in study");
 	chckbxAllowFindSop.setToolTipText("If set to \"true\", Orthanc will still handle \"SOP Classes in Study\" (0008,0062) in C-FIND requests, even if the \"SOP Class UID\" metadata is not available in the database.This option is turned off by default, as it requires intensive accesses to the hard drive.");
@@ -990,7 +991,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.AllowFindSopClassesInStudy=chckbxAllowFindSop.isSelected();
 		}
 	});
-	chckbxAllowFindSop.setSelected(AllowFindSopClassesInStudy);
+	chckbxAllowFindSop.setSelected(JsonParser.AllowFindSopClassesInStudy);
 	
 	JCheckBox chckbxLoadPrivateDictionary = new JCheckBox("Load Private Dictionary");
 	chckbxLoadPrivateDictionary.setToolTipText("If set to \"false\", Orthanc will not load its default dictionary of private tags.");
@@ -1001,7 +1002,7 @@ public class SettingsGUI extends JsonParser {
 			IndexOrthanc.LoadPrivateDictionary=chckbxLoadPrivateDictionary.isSelected();
 		}
 	});
-	chckbxLoadPrivateDictionary.setSelected(LoadPrivateDictionary);
+	chckbxLoadPrivateDictionary.setSelected(JsonParser.LoadPrivateDictionary);
 	
 	JButton btnDictionnary = new JButton("Dictionnary");
 	btnDictionnary.setToolTipText("Register a new tag in the dictionary of DICOM tags that are known to Orthanc.");
@@ -1017,7 +1018,7 @@ public class SettingsGUI extends JsonParser {
 	
 	JPanel panel_1 = new JPanel();
 	panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-	window.getContentPane().add(panel_1);
+	getContentPane().add(panel_1);
 	panel_1.setLayout(new BorderLayout(0, 0));
 	
 	JPanel panel_4 = new JPanel();
@@ -1047,7 +1048,7 @@ public class SettingsGUI extends JsonParser {
 	
 	JPanel buttons = new JPanel();
 	buttons.setBorder(new LineBorder(new Color(0, 0, 0)));
-	window.getContentPane().add(buttons);
+	getContentPane().add(buttons);
 	buttons.setLayout(new BorderLayout(0, 0));
 	
 	JPanel Bouttons_Title = new JPanel();
@@ -1076,32 +1077,28 @@ public class SettingsGUI extends JsonParser {
 		public void actionPerformed(ActionEvent arg0) {
 			//On charge le File chooser pour selctionner le fichier
 			JFileChooser fc =new JFileChooser();
-			
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			int ouvrir=fc.showOpenDialog(null);
 			//Si valide
 			if (ouvrir==JFileChooser.APPROVE_OPTION) {
 				File input=fc.getSelectedFile();
 				//On injecte le fichier selectionne
-				fichierInput=input;
+				jsonParser.fichierInput=input;
+				System.out.println(jsonParser.fichierInput);
 				//On le parse et on relance cette fenetre
 				try {
-					definitionFichier();
-					jsonParser();
-					window.setVisible(false);
+					jsonParser.definitionFichier();
+					jsonParser.jsonParser();
 					//On lance une nouvelle fenetre
 					SettingsGUI gui=new SettingsGUI();
-					gui.window.pack();
-					gui.window.setLocationRelativeTo(null);
-					gui.window.setSize(gui.window.getPreferredSize());
-					gui.window.setVisible(true);
+					gui.pack();
+					gui.setLocationRelativeTo(null);
+					gui.setSize(gui.getPreferredSize());
+					gui.setVisible(true);
 				} catch (Exception e) {e.printStackTrace();}
 			
 			}	
 		}
-		
-			
-			
-		
 	});
 	Bouttons_Bouttons.add(btnLoadJson);
 	
@@ -1109,13 +1106,16 @@ public class SettingsGUI extends JsonParser {
 	btnSaveJson.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			//On ecrit le JSON defini dans Index Orthanc
-			construireIndex();
+			jsonParser.construireIndex();
 			JFileChooser fc =new JFileChooser();
-			int ouvrir=fc.showOpenDialog(null);
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fc.setSelectedFile(jsonParser.fichierInput);
+			System.out.println(jsonParser.fichierInput);
+			int ouvrir=fc.showSaveDialog(null);
 			//Si valide
 			if (ouvrir==JFileChooser.APPROVE_OPTION) {
 				File output=fc.getSelectedFile();
-				writeJson(index,output);
+				jsonParser.writeJson(jsonParser.index,output);
 		}
 		}
 	});
@@ -1128,24 +1128,13 @@ public class SettingsGUI extends JsonParser {
 	btnRestartOrthancServer.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			Rest_Restart2 restart=new Rest_Restart2();
-			try {
-				restart.restartOrthanc(address+"/tools/reset", login, password);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (KeyManagementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (KeyStoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				try {
+					restart.restartOrthanc(address+"/tools/reset", login, password);
+				} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException | IOException
+						| ParseException e) {
+					e.printStackTrace();
+				}
+			
 		}
 	});
 	Orthanc_Connection.setLayout(new GridLayout(0, 2, 0, 0));
@@ -1162,11 +1151,9 @@ public class SettingsGUI extends JsonParser {
 					address=connectionDialog.getAddress();
 					login=connectionDialog.getLogin();
 					password=connectionDialog.getPassword();
-					System.out.println(address+login+password);
 				}
 				else {JOptionPane.showMessageDialog(null,"Connection OK");}
 			} catch (IOException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -1174,8 +1161,14 @@ public class SettingsGUI extends JsonParser {
 	Orthanc_Connection.add(btnTestOrthancConnection);
 	Orthanc_Connection.add(btnRestartOrthancServer);
 	}
-	
-	
-	
-	
+
+public static void main(String[] args) throws IOException, ParseException {
+		SettingsGUI gui=new SettingsGUI();
+		//On met la fenetre au centre de l ecran
+		gui.pack();
+		gui.setLocationRelativeTo(null);
+		gui.setSize(gui.getPreferredSize());
+		gui.setVisible(true);
+	}
+
 }

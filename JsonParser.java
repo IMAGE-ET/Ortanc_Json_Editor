@@ -34,17 +34,6 @@ public class JsonParser extends IndexOrthanc {
 	private FileReader reader ;
 	protected File fichierInput;
 	private StringWriter out;
-	//private JSONParser parser = new JSONParser();
-	
-	
-	public static void main(String[] args) throws IOException, ParseException {
-		SettingsGUI gui=new SettingsGUI();
-		//On met la fenetre au centre de l ecran
-		gui.window.pack();
-		gui.window.setLocationRelativeTo(null);
-		gui.window.setSize(gui.window.getPreferredSize());
-		gui.window.setVisible(true);
-	}
 	
 	/**
 	 * Permet de lire un fichier et enlever les commentaires avec JSmin
